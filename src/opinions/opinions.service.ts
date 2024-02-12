@@ -1,15 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOpinionDto } from './dto/create-opinion.dto';
 import { UpdateOpinionDto } from './dto/update-opinion.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Opinion } from './entities/opinion.entity';
 
 @Injectable()
 export class OpinionsService {
-  create(createOpinionDto: CreateOpinionDto) {
-    return 'This action adds a new opinion';
+  constructor(
+    @InjectRepository(Opinion)
+    private readonly opinionRepository: Repository<Opinion>,
+  ) {}
+
+  async create(createOpinionDto: CreateOpinionDto) {
+    const newOpinion = this.opinionRepository.create(createOpinionDto);
+    console.log(newOpinion);
+    newOpinion.createdAt = new Date();
+    newOpinion.updatedAt = new Date();
+    console.log(newOpinion);
+    await this.opinionRepository.save(newOpinion);
+    return `This action adds a new opinion${newOpinion}`;
   }
 
-  findAll() {
-    return `This action returns all opinions`;
+  async findAll(): Promise<Opinion[]> {
+    const Opinions = this.opinionRepository.find();
+    return Opinions;
   }
 
   findOne(id: number) {

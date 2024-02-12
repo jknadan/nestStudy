@@ -8,8 +8,8 @@ export class RolesService {
     return 'This action adds a new role';
   }
 
-  findAll() {
-    return `This action returns all roles`;
+  sendReturn() {
+    return `뭘봐 뒤지고 싶어?`;
   }
 
   findOne(id: number) {
